@@ -2,22 +2,22 @@ import { useState, useEffect } from 'react';
 import { Card, Button } from 'react-bootstrap';
 import Link from 'next/link';
 import jsondb from '@/jsondb/produkte';
+import { useMediaQuery } from '@react-hook/media-query';
 
 const ProduktListe = () => {
   const [isMobileView, setIsMobileView] = useState(false);
+  const [cart, setCart] = useState([]);
+
+  const isMobile = useMediaQuery('(max-width: 700px)');
 
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobileView(window.innerWidth <= 700);
-    };
+    setIsMobileView(isMobile);
+  }, [isMobile]);
 
-    handleResize(); // Set initial value
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
+  const handleAddToCart = (produkt) => {
+    setCart([...cart, produkt]);
+    localStorage.setItem('cart', JSON.stringify([...cart, produkt]));
+  };
 
   return (
     <div>

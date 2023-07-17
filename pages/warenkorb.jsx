@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Table, CloseButton, Button, Card } from 'react-bootstrap';
 import Image from 'next/image';
+import { useMediaQuery } from '@react-hook/media-query';
 
 const Warenkorb = () => {
   const [cart, setCart] = useState([]);
+  const isMobile = useMediaQuery('(max-width: 700px)');
 
   useEffect(() => {
     const storedCart = localStorage.getItem('cart');
@@ -31,7 +33,7 @@ const Warenkorb = () => {
     <div>
       <h1>Warenkorb</h1>
       <div className="row mt-4">
-        <div className="col-9">
+        <div className={`col-${isMobile ? '15' : '9'}`}>
           <Table hover responsive>
             <thead>
               <tr>
@@ -65,18 +67,31 @@ const Warenkorb = () => {
             </tbody>
           </Table>
         </div>
-        <div className="col-3 p-2">
-          <div className="shadow">
-            <Card>
-              <Card.Header as="h5">Gesamt</Card.Header>
-              <Card.Body className="text-center">
-                <Card.Title>{calculateTotal()} Euro</Card.Title>
-                <Button variant="primary">Zur Kasse</Button>
-              </Card.Body>
-            </Card>
+        {!isMobile && (
+          <div className="col-3 p-2">
+            <div className="shadow">
+              <Card>
+                <Card.Header as="h5">Gesamt</Card.Header>
+                <Card.Body className="text-center">
+                  <Card.Title>{calculateTotal()} Euro</Card.Title>
+                  <Button variant="primary">Zur Kasse</Button>
+                </Card.Body>
+              </Card>
+            </div>
           </div>
-        </div>
+        )}
       </div>
+      {isMobile && (
+        <div className="p-2 mb-5">
+          <Card>
+            <Card.Header as="h5">Gesamt</Card.Header>
+            <Card.Body className="text-center">
+              <Card.Title>{calculateTotal()} Euro</Card.Title>
+              <Button variant="primary">Zur Kasse</Button>
+            </Card.Body>
+          </Card>
+        </div>
+      )}
     </div>
   );
 };
