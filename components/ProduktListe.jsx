@@ -11,11 +11,14 @@ const ProduktListe = () => {
     localStorage.setItem('cart', JSON.stringify([...cart, produkt]));
   };
 
+  // Check if the screen width is less than or equal to 700px for mobile view
+  const isMobileView = window.innerWidth <= 700;
+
   return (
     <div>
-      <div className="row row-cols-3">
+      <div className={`row row-cols-${isMobileView ? 1 : 3}`}>
         {jsondb.produkte.map((produkt) => (
-          <div key={produkt.name} className="mt-3 col">
+          <div key={produkt.name} className={`mt-3 col${isMobileView ? '' : ''}`}>
             <Card>
               <Link href={`/produkte/${produkt.url}`} passHref>
                 <Card.Img variant="top" src={produkt.bild} />

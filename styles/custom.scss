@@ -5,3 +5,10 @@ $primary: #ffc01f;
 
 
 @import "../node_modules/bootstrap/scss/bootstrap.scss";
+
+
+@media (max-width: 700px) {
+    .row-cols-3 {
+        grid-template-columns: 1fr;
+    }
+}
