@@ -1,24 +1,29 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, Button } from 'react-bootstrap';
 import Link from 'next/link';
 import jsondb from '@/jsondb/produkte';
 
 const ProduktListe = () => {
-  const [cart, setCart] = useState([]);
+  const [isMobileView, setIsMobileView] = useState(false);
 
-  const handleAddToCart = (produkt) => {
-    setCart([...cart, produkt]);
-    localStorage.setItem('cart', JSON.stringify([...cart, produkt]));
-  };
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobileView(window.innerWidth <= 700);
+    };
 
-  // Check if the screen width is less than or equal to 700px for mobile view
-  const isMobileView = window.innerWidth <= 700;
+    handleResize(); // Set initial value
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   return (
     <div>
-      <div className={`row row-cols-${isMobileView ? 1 : 3}`}>
+      <div className="row row-cols-3">
         {jsondb.produkte.map((produkt) => (
-          <div key={produkt.name} className={`mt-3 col${isMobileView ? '' : ''}`}>
+          <div key={produkt.name} className={`mt-3 ${isMobileView ? 'col-12' : 'col'}`}>
             <Card>
               <Link href={`/produkte/${produkt.url}`} passHref>
                 <Card.Img variant="top" src={produkt.bild} />
